@@ -29,9 +29,10 @@ def register(request):
             login(request, user)
             messages.success(request, f"Welcome, {user.username}! Your account has been created.")
             return redirect('list_books')
-        else:
-            form = UserCreationForm()
-        return render(request, 'relationship_app/refister.html', {'form': form})
+    else:
+        form = UserCreationForm()
+
+    return render(request, 'relationship_app/register.html', {'form': form})
 
 
 #User Login
