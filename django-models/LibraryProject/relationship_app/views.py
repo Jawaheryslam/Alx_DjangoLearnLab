@@ -35,7 +35,7 @@ def register(request):
 
 
 #User Login
-def login(request):
+def login_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -49,7 +49,7 @@ def login(request):
 
 
 #User Logout
-def logout(request):
+def logout_view(request):
     logout(request)
     messages.info(request, "You have been logged out.")
     return render(request, 'relationship_app/logout,html')
