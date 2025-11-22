@@ -17,11 +17,11 @@ class Book(models.Model):
     published_date = models.DateField(default=timezone.now)
 
     class Meta:
-        permissions = [
+        permissions = (
                 ("can_add_book", "Can add a book"),
                 ("can_change_book", "Can edit a book"),
                 ("can_delete_book", "Can delete a book"),
-        ]
+        )
 
     def __str__(self):
         return self.title
