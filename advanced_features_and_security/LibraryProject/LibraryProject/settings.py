@@ -29,11 +29,15 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 #Browser security
 SECURE_BROWSER_XSS_FILTER = True  #protects against some XSS attack
 SECURE_CONTENT_TYPE_NOSNIFF = True  #prevents browser from guessing content type
-X_FRAME_OPTION = 'DENY'  #prevents clickjacking attacks
+X_FRAME_OPTIONS = 'DENY'  #prevents clickjacking attacks
 
 #Cookies over https only
 CSRF_COOKIE_SECURE = True  #ensure cookies only sent via HTTPS
 SESSION_COOKIE_SECURE = True
+
+SECURE_HSTS_SECONDS = 3600
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
 
 # Application definition
 INSTALLED_APPS = [
