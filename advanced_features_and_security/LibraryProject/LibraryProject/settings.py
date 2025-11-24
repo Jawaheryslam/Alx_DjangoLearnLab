@@ -26,20 +26,23 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
+
+SECURE_SSL_REDIRECT = True  #redirects all http requests to https
+SECURE_HSTS_SECONDS = 31536000  #1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  #apply hsts to all subdomains
+SECURE_HSTS_PRELOAD = True  #allows preloading in browsers
+
+#Cookies over https only
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True  #ensure cookies only sent via HTTPS
+
 #Browser security
 SECURE_BROWSER_XSS_FILTER = True  #protects against some XSS attack
 SECURE_CONTENT_TYPE_NOSNIFF = True  #prevents browser from guessing content type
 X_FRAME_OPTIONS = 'DENY'  #prevents clickjacking attacks
 
-#Cookies over https only
-CSRF_COOKIE_SECURE = True  #ensure cookies only sent via HTTPS
-SESSION_COOKIE_SECURE = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-SECURE_SSL_REDIRECT = True  #redirects all http requests to https
-
-SECURE_HSTS_SECONDS = 31536000  #1 year
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True  #apply hsts to all subdomains
-SECURE_HSTS_PRELOAD = True  #allows preloading in browsers
 
 # Application definition
 INSTALLED_APPS = [
