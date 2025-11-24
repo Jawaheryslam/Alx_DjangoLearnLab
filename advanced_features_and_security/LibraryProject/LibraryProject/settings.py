@@ -35,9 +35,11 @@ X_FRAME_OPTIONS = 'DENY'  #prevents clickjacking attacks
 CSRF_COOKIE_SECURE = True  #ensure cookies only sent via HTTPS
 SESSION_COOKIE_SECURE = True
 
-SECURE_HSTS_SECONDS = 3600
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
+SECURE_SSL_REDIRECT = True  #redirects all http requests to https
+
+SECURE_HSTS_SECONDS = 31536000  #1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  #apply hsts to all subdomains
+SECURE_HSTS_PRELOAD = True  #allows preloading in browsers
 
 # Application definition
 INSTALLED_APPS = [
@@ -138,3 +140,24 @@ CSP_SCRIPT_SRC = ("'self'",)
 CSP_STYLE_SRC = ("'self'", 'fonts.googleapis.com')
 CSP_FONT_SRC = ("'self'", 'fonts.gstatic.com')
 CSP_IMG_SRC = ("'self'", 'data:')
+
+
+"""
+server {
+    listen 80;
+    server_name yourdomain.com www.yourdomain.com;
+    return 301 https://$host$request_url;
+}
+
+server {
+    listen 443 ssl;
+    server_name yourdomain.com www.yourdomain.com;
+
+    ssl_certificate /path/to/fullchain.pem;
+    ssl_certifcate_key /path/to/privkey.pem;
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+    }
+}
+"""
