@@ -17,7 +17,7 @@ class BookListView(generics.ListAPIView):
 
     # Required filter backends
     filter_backends = [
-            rest.framework.DjangoFilterBackend,
+            rest_framework.DjangoFilterBackend,
             filters.SearchFilter,
             filters.OrderingFilter,
     ]
