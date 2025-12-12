@@ -4,6 +4,7 @@ from . import views
 app_name = 'blog'
 
 urlpatterns = [
+        # posts
         path('login/', views.CustomLoginView.as_view(), name='login'),
         path('logout/', views.CustomLogoutView.as_view(), name='logout'),
         path('register/', views.register, name='register'),
@@ -14,4 +15,9 @@ urlpatterns = [
         path('post/<int:pk>/update/', views.PostUpdateView.as_view(), name='post_update'),
         path('post/<int:pk>/delete/', views.PostDeleteView.as_view(), name='post-delete'),
         path('', views.PostListView.as_view(), name='post-list'),
+
+        # comments
+        path('post/<int:pk>/comment/new', views.CommentCreateView.as_view(), name='comment-create'),
+        path('comment/<int:pk>/update/', views.CommentUpdateView.as_view(), name='comment-update'),
+        path('comment/<int:pk>/delete/', views.CommentDeleteView.as_view(), name='comment-delete'),
 ]
