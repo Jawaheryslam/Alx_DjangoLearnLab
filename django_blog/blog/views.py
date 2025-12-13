@@ -5,9 +5,9 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .models import Post, Comment
+from .models import Post, Comment, Tag
 from .forms import SignUpForm, UserForm, ProfileForm, PostForm, CommentForm
-
+from django.db.models import Q
 
 class CustomLoginView(LoginView):
     template_name = 'blog/login.html'
@@ -59,6 +59,44 @@ class PostListView(ListView):
     def get_queryset(self):
         qs = super().get_queryset()
         return qs.filter(published=True)
+
+class PostByTagListView(ListView):
+    model = Post
+    template_name = 'blog/posts_by_tag.html'
+    context_object_name = 'posts'
+    paginate_by = 10
+
+    def get_queryset(self):
+        tag_name = self.kwargs.get('tag_name')
+        return Post.objects.Filter(published=True, tags__name__iexact=tags_name).distinct()
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['tag_name'] = self.kwargs.get('tag_name')
+        return ctx
+
+class SearchResultsView(ListView):
+    model = Post
+    template_name = 'blog/search_results.html'
+    context_object_name = 'posts'
+    paginated_by = 10
+
+    def get_queryset(self):
+        q = self.request.get('q', '').strip()
+        if not q:
+            return Post.objects.none()
+        return Post.objects.filter(
+                published=True
+        ).filter(
+                Q(title__icontains=q) |
+                Q(content__icontains=q) |
+                Q(tags__name__icontains=q)
+        ).distinct()
+
+    def get_context_data(slef, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['query'] = self.request.GET.get('q', '')
+        return ctx
 
 class PostDetailView(DetailView):
     model = Post

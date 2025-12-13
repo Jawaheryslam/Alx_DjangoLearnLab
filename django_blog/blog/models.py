@@ -21,17 +21,27 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
     else:
         instance.profile.save()
 
+class Tag(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('blog:post-by-tag', kwargs={'tag_name': self.name})
+
+
 class Post(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, User, on_delete=models.CASCADE, related_name='posts')
+    tags = models.ManyToManyField(Tag, blank=True, related_name='posts')
     published_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
     published = models.BooleanField(default=True)
-    author = models.ForeignKey(
-            User,
-            on_delete=models.CASCADE,
-            related_name='posts'
-    )
 
     class Meta:
         ordering = ['-published_date']
@@ -61,3 +71,4 @@ class Comment(models.Model):
 
     def get_delete_url(self):
         return reverse('blog:comment-delete', kwargs={'pk': self.pk})
+
